@@ -2,6 +2,12 @@
 
 A modular, production-ready backend framework for building AI chat applications powered by large language models (LLMs), using FastAPI and dependency injection. This framework supports multiple expert types and incorporates the latest techniques for building scalable chatbot applications.
 
+### After Making Changes
+
+* cd /path/to/Alpha-67-Chatbot
+* docker build -t jiaying0811/alpha-67-chatbot:latest .
+* docker push jiaying0811/alpha-67-chatbot:latest
+
 ## Features
 
 ### 🤖 AI & LLM Integration
@@ -161,12 +167,6 @@ python cli.py --mode deepresearch
 # With streaming and custom model
 python cli.py --mode deepresearch --model azureopenai --stream
 ```
-
-### After Making Changes
-
-cd /path/to/Alpha-67-Chatbot
-docker build -t jiaying0811/alpha-67-chatbot:latest .
-docker push jiaying0811/alpha-67-chatbot:latest
 
 ### CLI Features & Commands
 
