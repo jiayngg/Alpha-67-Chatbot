@@ -5,8 +5,10 @@ A modular, production-ready backend framework for building AI chat applications 
 ### After Making Changes
 
 * cd /path/to/Alpha-67-Chatbot
-* docker build -t jiaying0811/alpha-67-chatbot:latest .
-* docker push jiaying0811/alpha-67-chatbot:latest
+* docker login
+* docker build -t `<yr-docker-id>`/alpha-67-chatbot:latest .
+* docker push `<yr-docker-id>`/alpha-67-chatbot:latest
+* update image name in docker-compose.yml (e.g. jiaying0811/alpha-67-chatbot:latest)
 
 ## Features
 
