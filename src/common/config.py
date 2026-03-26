@@ -74,8 +74,12 @@ class Config(BaseModel):
     expert_type: Optional[str] = Field(default="QNA", description="Type of expert to use (QNA, RAG, DEEPRESEARCH)")
 
     # Vector Database Configuration
-    vector_database_type: Optional[str] = Field(default="CHROMA", description="Type of vector database to use (CHROMA, FAISS)")
+    vector_database_type: Optional[str] = Field(default="CHROMA", description="Type of vector database to use (CHROMA, SUPABASE)")
     vector_database_chroma_path: Optional[str] = Field(default="./chroma_db", description="Path to Chroma vector database")
+
+    ## Supabase Vector Database Configuration
+    supabase_url: Optional[str] = Field(default=None, description="Supabase project URL")
+    supabase_service_key: Optional[str] = Field(default=None, description="Supabase service role key")
 
     # Embedding Configuration
     embedding_type: Optional[str] = Field(default="AZUREOPENAI", description="Type of embedding to use (OPENAI, AZUREOPENAI)")
