@@ -13,6 +13,7 @@ pydantic-settings>=2.0.0
 # API and server
 fastapi>=0.110.0
 uvicorn>=0.27.0
+python-multipart>=0.0.9
 
 # Database
 pymongo>=4.6.1
@@ -22,6 +23,7 @@ openai>=1.5.0
 azure-identity>=1.12.0
 azure-core>=1.30.0
 langchain-google-genai>=1.0.3
+langchain-google-vertexai>=2.0.0
 
 # Utilities
 python-dotenv>=1.0.0
