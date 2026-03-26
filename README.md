@@ -5,6 +5,7 @@ A modular, production-ready backend framework for building AI chat applications 
 ## Features
 
 ### 🤖 AI & LLM Integration
+
 - 🧠 **Multiple Expert Types**: Support for different chat modes:
   - **QNA**: Basic question-answering chatbot
   - **RAG**: Retrieval-Augmented Generation with document processing
@@ -14,23 +15,27 @@ A modular, production-ready backend framework for building AI chat applications 
 - 📚 **Document Processing**: Built-in PDF processing and vector storage for RAG
 
 ### 💬 Conversation & Memory Management
+
 - 🗄️ **Multiple Memory Backends**: In-memory, MongoDB, and SQL storage options
 - 🔄 **Conversation History**: Persistent conversation management with user sessions
 - 🧹 **Memory Operations**: Clear, retrieve, and manage conversation history
 
 ### 🛠️ Development & Architecture
+
 - 🚀 **FastAPI Integration**: Modern, async API with automatic OpenAPI documentation
 - 🔌 **Dependency Injection**: Clean component management using the Injector pattern
 - ⚡ **Async Support**: Full asynchronous operation for high-performance applications
 - 🧪 **Extensible Tool System**: Easy integration of custom tools (web search, etc.)
 
 ### 🔧 Operations & Reliability
+
 - 📝 **Comprehensive Logging**: Detailed logging with configurable levels
 - 🔒 **Error Handling**: Robust error management with custom middleware
 - 🧪 **Testing Infrastructure**: Complete test suite with async support
 - 🐳 **Docker Support**: Containerized deployment ready
 
 ### 🖥️ User Interfaces
+
 - 🖥️ **Multiple CLI Modes**: Interactive command-line interfaces for different bot types
 - 🎨 **Colorized Output**: Beautiful terminal interface with colored responses
 - 📊 **Streaming CLI**: Real-time token-by-token response streaming
@@ -46,12 +51,13 @@ A modular, production-ready backend framework for building AI chat applications 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd backend
    ```
-
 2. Install dependencies using uv:
+
    ```bash
    # Create and activate virtual environment
    uv venv
@@ -62,16 +68,16 @@ A modular, production-ready backend framework for building AI chat applications 
    # Install dependencies
    uv pip install -r requirements.txt
    ```
-
 3. Set up environment variables:
+
    ```bash
    # Core Configuration
    MODEL_TYPE=OPENAI  # Options: OPENAI, LLAMA, AZUREOPENAI, VERTEX, GEMINI
-   
+
    # OpenAI Configuration
    OPENAI_API_KEY=your_openai_key
    BASE_MODEL_NAME=gpt-3.5-turbo
-   
+
    # Azure OpenAI Configuration (if using Azure)
    AZURE_CHAT_MODEL_KEY=your_azure_key
    AZURE_CHAT_MODEL_VERSION=2024-02-15-preview
@@ -81,26 +87,26 @@ A modular, production-ready backend framework for building AI chat applications 
    # Google Gemini Configuration
    GEMINI_API_KEY=your_gemini_key
    GEMINI_MODEL_NAME=gemini-pro
-   
+
    # MongoDB Configuration (optional)
    MONGO_URI=mongodb://localhost:27017/chatbot
    MONGO_DATABASE=langchain_bot
    MONGO_COLLECTION=chatbot
-   
+
    # Vector Database Configuration
    VECTOR_DATABASE_TYPE=CHROMA
    VECTOR_DATABASE_CHROMA_PATH=./chroma_db
-   
+
    # Embedding Configuration (for RAG)
    EMBEDDING_TYPE=AZUREOPENAI
    AZURE_EMBEDDING_MODEL_KEY=your_azure_key
    AZURE_EMBEDDING_MODEL_ENDPOINT=your_endpoint
    AZURE_EMBEDDING_MODEL_DEPLOYMENT=your_deployment
    AZURE_EMBEDDING_MODEL_VERSION=2024-02-15-preview
-   
+
    # Tavily Search (for DEEPRESEARCH)
    TAVILY_API_KEY=your_tavily_key
-   
+
    # Server Configuration
    PORT=8080
    HOST=0.0.0.0
@@ -110,10 +116,13 @@ A modular, production-ready backend framework for building AI chat applications 
 ### Running the Application
 
 #### 1. API Server
+
 Start the FastAPI server:
+
 ```bash
 python app.py
 ```
+
 The API will be available at http://localhost:8080 with automatic documentation at http://localhost:8080/docs
 
 #### 2. Command Line Interface
@@ -121,6 +130,7 @@ The API will be available at http://localhost:8080 with automatic documentation 
 The framework provides a unified CLI with three specialized bot modes:
 
 **QNA Bot** - Basic question-answering:
+
 ```bash
 # Basic usage
 python cli.py --mode qna
@@ -130,6 +140,7 @@ python cli.py --mode qna --model azureopenai --stream
 ```
 
 **RAG Bot** - Document-aware chat:
+
 ```bash
 # Basic RAG chat
 python cli.py --mode rag
@@ -142,6 +153,7 @@ python cli.py --mode rag --model openai --conversation-id doc_session
 ```
 
 **DeepResearch Bot** - Advanced research assistant:
+
 ```bash
 # Research mode with web search capabilities
 python cli.py --mode deepresearch
@@ -150,9 +162,16 @@ python cli.py --mode deepresearch
 python cli.py --mode deepresearch --model azureopenai --stream
 ```
 
+### After Making Changes
+
+cd /path/to/Alpha-67-Chatbot
+docker build -t jiaying0811/alpha-67-chatbot:latest .
+docker push jiaying0811/alpha-67-chatbot:latest
+
 ### CLI Features & Commands
 
 All CLI modes support:
+
 - `exit` or `quit`: Exit the chat
 - `clear`: Clear conversation history
 - `Ctrl+C`: Force exit
@@ -161,10 +180,12 @@ All CLI modes support:
 - `--conversation-id`: Set custom session ID
 
 **RAG-specific features:**
+
 - `--document`: Process and index documents (PDF, TXT, etc.)
 - Document question-answering based on uploaded content
 
 **DeepResearch-specific features:**
+
 - Web search integration for current information
 - Advanced reasoning and research capabilities
 
@@ -173,20 +194,24 @@ All CLI modes support:
 The REST API provides the following endpoints:
 
 ### Chat Endpoints
+
 - `POST /api/v1/chat/message` - Send a message and get response
 - `POST /api/v1/chat/stream` - Stream chat responses (SSE)
 - `DELETE /api/v1/chat/clear` - Clear conversation history
 
 ### Expert Management
+
 - `GET /api/v1/experts/available` - List available expert types
 - `POST /api/v1/experts/switch` - Switch between expert types
 
 ### RAG Operations
+
 - `POST /api/v1/rag/upload` - Upload and process documents
 - `GET /api/v1/rag/documents` - List processed documents
 - `DELETE /api/v1/rag/documents/{doc_id}` - Delete a document
 
 ### Health & Status
+
 - `GET /api/v1/health` - Health check endpoint
 - `GET /` - API documentation redirect
 
@@ -237,6 +262,7 @@ backend/
 The framework follows Clean Architecture principles with clear separation of concerns:
 
 ### Core Components
+
 - **Chat Engine**: Orchestrates conversations between users and experts
 - **Experts**: Specialized AI assistants (QNA, RAG, DeepResearch)
 - **Brains**: LLM abstraction layer supporting multiple providers
@@ -244,7 +270,9 @@ The framework follows Clean Architecture principles with clear separation of con
 - **Tools**: External capabilities (web search, document processing)
 
 ### Dependency Injection
+
 The framework uses the Injector pattern for clean dependency management:
+
 - Configuration-driven component initialization
 - Easy testing with mock dependencies
 - Modular and extensible architecture
@@ -252,6 +280,7 @@ The framework uses the Injector pattern for clean dependency management:
 ## Development
 
 ### Running Tests
+
 ```bash
 # Run all tests
 pytest
@@ -264,6 +293,7 @@ pytest -m integration
 ```
 
 ### Code Quality
+
 ```bash
 # Run linting
 flake8 .
@@ -276,6 +306,7 @@ make clean
 ```
 
 ### Docker Support
+
 ```bash
 # Build Docker image
 make docker-build
@@ -292,10 +323,12 @@ docker-compose up
 The application uses environment variables for configuration. Key settings:
 
 ### Required Settings
+
 - `MODEL_TYPE`: LLM provider (OPENAI, AZUREOPENAI, LLAMA, VERTEX, GEMINI)
 - `OPENAI_API_KEY` or equivalent provider keys
 
 ### Optional Settings
+
 - `MONGO_URI`: MongoDB connection for persistent memory
 - `VECTOR_DATABASE_TYPE`: Vector database type (CHROMA, INMEMORY)
 - `TAVILY_API_KEY`: Web search API key for DeepResearch
@@ -313,6 +346,7 @@ The application uses environment variables for configuration. Key settings:
 8. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow Clean Architecture principles
 - Write comprehensive tests
 - Use type hints throughout
