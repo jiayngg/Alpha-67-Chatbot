@@ -1,6 +1,9 @@
 from typing import List, Dict, Any
 import os
 
+import csv
+import json
+
 from injector import inject
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
@@ -31,6 +34,26 @@ class RAGBotExpert(BaseExpert):
         self.embedding = embedding
         self.vector_database = vector_database
         self.document_chunker = SemanticChunker(self.embedding.embeddings)
+
+    def _load_document(self, file_path: str) -> List[Document]:
+        ext = os.path.splitext(file_path)[1].lower()
+        if ext == ".pdf":
+            return PyPDFLoader(file_path).load()
+        elif ext == ".csv":
+            docs = []
+            with open(file_path, newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    docs.append(Document(page_content=", ".join(f"{k}: {v}" for k, v in row.items())))
+            return docs
+        elif ext == ".json":
+            with open(file_path, encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                return [Document(page_content=json.dumps(item)) for item in data]
+            return [Document(page_content=json.dumps(data))]
+        else:
+            raise ValueError(f"Unsupported file type: {ext}. Supported types: pdf, csv, json")
 
     def chunk_document(self, documents: List[Document]):
         """
@@ -72,27 +95,27 @@ class RAGBotExpert(BaseExpert):
         
         try:
             logger.info(f"Loading document from: {file_path}")
-            docs = PyPDFLoader(file_path).load()
-            
+            docs = self._load_document(file_path)
+
             if not docs:
                 raise ValueError(f"No content could be extracted from file: {file_path}")
-            
+
             for doc in docs:
                 doc.metadata.update({"user_id": user_id, "document_id": document_id}) # type: ignore
 
             logger.info(f"Successfully loaded {len(docs)} pages from document")
-            
+
             logger.info("Chunking document...")
             doc_chunks = self.chunk_document(docs)
-            
+
             if not doc_chunks:
                 raise ValueError("No chunks were created from the document")
-            
+
             logger.info(f"Created {len(doc_chunks)} chunks from document")
-            
+
             logger.info("Indexing document chunks...")
             return self.index_documents(list(doc_chunks))
-            
+
         except Exception as e:
             logger.error(f"Error processing document {file_path}: {str(e)}")
             raise
@@ -110,7 +133,7 @@ class RAGBotExpert(BaseExpert):
         
         try:
             logger.info(f"Loading document from: {file_path}")
-            docs = await PyPDFLoader(file_path).aload()
+            docs = self._load_document(file_path)
             
             if not docs:
                 raise ValueError(f"No content could be extracted from file: {file_path}")
