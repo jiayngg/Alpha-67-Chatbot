@@ -8,7 +8,7 @@ from typing import Dict, Any, Optional, List, Generator, AsyncGenerator
 
 from injector import inject
 from langchain_openai import ChatOpenAI
-from openai import OpenAI, AsyncOpenAI
+from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage
 
 from src.base.components.llms.base import BaseLLMClient
 from src.common.config import Config
@@ -21,146 +21,80 @@ class OpenAIClient(BaseLLMClient):
     def __init__(self, config: Config):
         """
         Initialize the OpenAI client.
-        
+
         Args:
             config: Application configuration
         """
         self.config = config
-        self.client = OpenAI(api_key=config.openai_api_key)
-        self.async_client = AsyncOpenAI(api_key=config.openai_api_key)
         self.model_name = config.base_model_name or "gpt-3.5-turbo"
         self.temperature = 0.7
+        self.client = ChatOpenAI(
+            model=self.model_name,
+            api_key=config.openai_api_key,
+            temperature=self.temperature,
+        )
 
     def bind_tools(self, tools: Optional[List[Any]] = None) -> None:
         """
         Bind tools to the OpenAI client.
         """
-        logger.warning("OpenAI client doesn't support tools")
-    
+        if tools:
+            self.client = self.client.bind_tools([tool.to_openai_tool() for tool in tools])
+
+    def _format_messages(self, messages: List[Dict[str, str]]) -> List[BaseMessage]:
+        formatted: List[BaseMessage] = []
+        for msg in messages:
+            if 'role' in msg and 'content' in msg:
+                role, content = msg["role"], msg["content"]
+                if role == "user":
+                    formatted.append(HumanMessage(content))
+                elif role == "assistant":
+                    formatted.append(AIMessage(content))
+                elif role == "system":
+                    formatted.append(SystemMessage(content))
+        return formatted
+
     def chat(self, messages: List[Dict[str, str]], **kwargs: Any) -> Dict[str, Any]:
         """
         Send a chat message to OpenAI and get a response.
-        
+
         Args:
             messages: List of message dictionaries with 'role' and 'content' keys
             **kwargs: Additional model parameters
-            
+
         Returns:
             The model's response as a string
         """
-        # Override default parameters with kwargs
-        model_value = kwargs.get('model', self.model_name)
-        model = str(model_value) if model_value is not None else self.model_name
-        
-        temp_value = kwargs.get('temperature', self.temperature)
-        temperature = float(temp_value) if temp_value is not None else self.temperature
-        
-        # Convert messages to the format expected by OpenAI
-        formatted_messages: List[Dict[str, Any]] = []
-        for msg in messages:
-            # Ensure each message has 'role' and 'content' keys
-            if 'role' in msg and 'content' in msg:
-                formatted_messages.append({
-                    "role": msg["role"],
-                    "content": msg["content"]
-                })
-        
-        # Call the OpenAI API
-        response = self.client.chat.completions.create(
-            model=model,
-            messages=formatted_messages,
-            temperature=temperature,
-        )
-        
-        # Return the content of the first choice
-        content = response.choices[0].message.content
-        return {"content": content, "additional_kwargs": getattr(response.choices[0].message, "additional_kwargs", {})}
-    
+        response = self.client.invoke(self._format_messages(messages))
+        return {"content": response.content, "additional_kwargs": response.additional_kwargs}
+
     def stream_chat(self, messages: List[Dict[str, str]], **kwargs: Any) -> Generator[str, None, None]:
         """
         Send a chat message to OpenAI and stream the response.
-        
+
         Args:
             messages: List of message dictionaries with 'role' and 'content' keys
             **kwargs: Additional model parameters
-            
+
         Yields:
             Chunks of the response content
         """
-        # Override default parameters with kwargs
-        model_value = kwargs.get('model', self.model_name)
-        model = str(model_value) if model_value is not None else self.model_name
-        
-        temp_value = kwargs.get('temperature', self.temperature)
-        temperature = float(temp_value) if temp_value is not None else self.temperature
-        
-        # Convert messages to the format expected by OpenAI
-        formatted_messages = []
-        for msg in messages:
-            # Ensure each message has 'role' and 'content' keys
-            if 'role' in msg and 'content' in msg:
-                formatted_messages.append({
-                    "role": msg["role"],
-                    "content": msg["content"]
-                })
-        
-        # Call the OpenAI API with streaming
-        stream = self.client.chat.completions.create(
-            model=model,
-            messages=formatted_messages,  # type: ignore
-            temperature=temperature,
-            stream=True
-        )
-        
-        # Yield chunks as they arrive
-        for chunk in stream:
-            if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
-                delta = chunk.choices[0].delta
-                if hasattr(delta, 'content') and delta.content is not None:
-                    yield delta.content
-    
+        for chunk in self.client.stream(self._format_messages(messages)):
+            yield chunk.content
+
     async def astream_chat(self, messages: List[Dict[str, str]], **kwargs: Any) -> AsyncGenerator[str, None]:
         """
         Send a chat message to OpenAI and stream the response asynchronously.
-        
+
         Args:
             messages: List of message dictionaries with 'role' and 'content' keys
             **kwargs: Additional model parameters
-            
+
         Yields:
             Chunks of the response content
         """
-        # Override default parameters with kwargs
-        model_value = kwargs.get('model', self.model_name)
-        model = str(model_value) if model_value is not None else self.model_name
-        
-        temp_value = kwargs.get('temperature', self.temperature)
-        temperature = float(temp_value) if temp_value is not None else self.temperature
-        
-        # Convert messages to the format expected by OpenAI
-        formatted_messages: List[Dict[str, Any]] = []
-        for msg in messages:
-            # Ensure each message has 'role' and 'content' keys
-            if 'role' in msg and 'content' in msg:
-                formatted_messages.append({
-                    "role": msg["role"],
-                    "content": msg["content"]
-                })
-        
-        # Call the OpenAI API with streaming
-        stream = await self.async_client.chat.completions.create(
-            model=model,
-            messages=formatted_messages,  # type: ignore
-            temperature=temperature,
-            stream=True
-        )
-        
-        # Yield chunks as they arrive
-        async for chunk in stream:
-            if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
-                delta = chunk.choices[0].delta
-                if hasattr(delta, 'content') and delta.content is not None:
-                    yield delta.content
+        async for chunk in self.client.astream(self._format_messages(messages)):
+            yield chunk.content
 
     def complete(self, prompt: str, **kwargs: Any) -> Dict[str, Any]:
         """

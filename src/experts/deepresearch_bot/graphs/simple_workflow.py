@@ -25,7 +25,7 @@ from src.experts.deepresearch_bot.utils import (
 )
 from src.experts.deepresearch_bot.state import (
     OverallState,
-    ƒ,
+    QueryGenerationState,
     ReflectionState,
     WebSearchState,
 )

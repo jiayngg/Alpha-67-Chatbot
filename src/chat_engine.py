@@ -8,7 +8,7 @@ from injector import inject
 
 from src.common.schemas import ChatResponse
 from src.base.brains import BrainInterface
-from src.experts import QnaExpert, RAGBotExpert, DeepResearchExpert
+from src.experts import RAGBotExpert
 from src.common.config import Config
 from src.common.logging import logger
 
@@ -23,26 +23,15 @@ class ChatEngine:
         self,
         config: Config,
         brain: BrainInterface,
-        qna_expert: QnaExpert,
         rag_bot_expert: RAGBotExpert,
-        deepresearch_expert: DeepResearchExpert
     ):
         """Initialize the chat engine with an expert instance."""
-        # Create the config
         self.config = config
-        # Create a brain based on the config
-        self.brain = brain        
-        self.qna_expert = qna_expert
+        self.brain = brain
         self.rag_bot_expert = rag_bot_expert
-        self.deepresearch_expert = deepresearch_expert
-        if config.expert_type == "RAG":
-            self.current_expert = self.rag_bot_expert
-        elif config.expert_type == "DEEPRESEARCH":
-            self.current_expert = self.deepresearch_expert
-        else:
-            self.current_expert = qna_expert
+        self.current_expert = rag_bot_expert
 
-        logger.info(f"ChatEngine initialized with expert type: {config.expert_type}")
+        logger.info(f"ChatEngine initialized with RAGBotExpert")
         logger.info(f"Expert class: {type(self.current_expert).__name__}")
     
     def get_current_expert_info(self) -> Dict[str, Any]:
@@ -53,32 +42,6 @@ class ChatEngine:
             Dictionary containing current expert information
         """
         return self.current_expert.get_expert_info()
-    
-    def switch_expert(self, expert_type: str) -> None:
-        """
-        Switch to a different expert type.
-        
-        Args:
-            expert_type: The new expert type to switch to
-            
-        Raises:
-            ValueError: If the expert type is not supported
-        """
-        logger.info(f"Switching expert from {self.config.expert_type} to {expert_type}")
-        
-        # Update configuration
-        old_expert_type = self.config.expert_type
-        self.config.expert_type = expert_type
-        
-        try:
-            # Create new expert instance
-            self.current_expert = self.qna_expert if expert_type == "QNA" else self.rag_bot_expert
-            logger.info(f"Successfully switched to expert type: {expert_type}")
-        except Exception as e:
-            # Rollback configuration on failure
-            self.config.expert_type = old_expert_type
-            logger.error(f"Failed to switch expert to {expert_type}: {str(e)}")
-            raise
     
     async def process_message(
         self, 

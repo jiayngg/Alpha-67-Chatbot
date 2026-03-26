@@ -8,6 +8,8 @@ This is the main entry point for running the application. It:
 4. Starts the server when run directly
 """
 
+import socket
+
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -33,15 +35,23 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+def find_available_port(start_port: int) -> int:
+    for port in range(start_port, 8090):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex(("localhost", port)) != 0:
+                return port
+    raise RuntimeError("No available ports in range 8080-8089")
+
+
 if __name__ == "__main__":
     # Load config
     config = Config()
-    
-    # Get port from environment or config
-    port = int(config.port)
-    
+
+    # Find an available port starting from configured port
+    port = find_available_port(int(config.port))
+
     logger.info(f"Starting server on port {port}...")
     logger.info(f"API documentation available at http://localhost:{port}/docs")
-    
+
     # Run the application with uvicorn
     uvicorn.run(app, host="0.0.0.0", port=port)
