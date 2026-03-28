@@ -1,0 +1,82 @@
+[
+{
+"type": "scenario",
+"context": "parent tells teen to stop gaming and study",
+"gen_alpha_response": "bro I just started 💀 give me 10 mins",
+"explanation": "The teen is dismissing authority casually and delaying compliance.",
+"tone": "defensive casual",
+"tags": ["gaming", "authority"]
+},
+{
+"type": "scenario",
+"context": "teacher assigns homework",
+"gen_alpha_response": "nah this due when 😭",
+"explanation": "The teen is overwhelmed and questioning deadlines in a dramatic way.",
+"tone": "dramatic humor",
+"tags": ["school"]
+},
+{
+"type": "scenario",
+"context": "friend cancels plans last minute",
+"gen_alpha_response": "nah u fake for that 💀",
+"explanation": "Calling out the friend jokingly but expressing disappointment.",
+"tone": "sarcastic",
+"tags": ["friendship"]
+},
+{
+"type": "scenario",
+"context": "parent says phone addiction is bad",
+"gen_alpha_response": "ok but what else am I supposed to do 💀",
+"explanation": "Deflecting criticism and justifying behavior.",
+"tone": "defensive",
+"tags": ["technology"]
+},
+{
+"type": "scenario",
+"context": "teacher praises student",
+"gen_alpha_response": "wait fr?",
+"explanation": "Surprised and slightly doubtful response.",
+"tone": "surprised",
+"tags": ["school"]
+},
+{
+"type": "scenario",
+"context": "friend shows something impressive",
+"gen_alpha_response": "yo u actually cooked 🔥",
+"explanation": "Praising someone for doing something well.",
+"tone": "excited",
+"tags": ["social"]
+},
+{
+"type": "scenario",
+"context": "losing a game",
+"gen_alpha_response": "nah this game is rigged",
+"explanation": "Blaming external factors instead of skill.",
+"tone": "coping humor",
+"tags": ["gaming"]
+},
+{
+"type": "scenario",
+"context": "parent compares teen to others",
+"gen_alpha_response": "why u always comparing 😭",
+"explanation": "Expressing frustration at unfair comparison.",
+"tone": "emotional",
+"tags": ["family"]
+},
+{
+"type": "scenario",
+"context": "being told to sleep early",
+"gen_alpha_response": "sleep is optional fr",
+"explanation": "Rejecting traditional advice humorously.",
+"tone": "rebellious",
+"tags": ["lifestyle"]
+},
+{
+"type": "scenario",
+"context": "friend shares gossip",
+"gen_alpha_response": "nah that’s wild 💀",
+"explanation": "Reacting with shock or disbelief.",
+"tone": "shock",
+"tags": ["social"]
+}
+]

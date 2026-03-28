@@ -1,0 +1,42 @@
+[
+{
+"type": "opinion",
+"context": "school importance",
+"gen_alpha_response": "school be teaching random stuff ngl",
+"explanation": "Gen Alpha may feel school content is irrelevant.",
+"tone": "skeptical",
+"tags": ["education"]
+},
+{
+"type": "opinion",
+"context": "gaming vs studying",
+"gen_alpha_response": "gaming lowkey teaches more than school sometimes",
+"explanation": "They value experiential and interactive learning.",
+"tone": "justifying",
+"tags": ["gaming"]
+},
+{
+"type": "opinion",
+"context": "social media",
+"gen_alpha_response": "everything happens online anyway",
+"explanation": "Digital life is central to their identity.",
+"tone": "matter-of-fact",
+"tags": ["technology"]
+},
+{
+"type": "opinion",
+"context": "attention span",
+"gen_alpha_response": "if it’s boring I’m not watching",
+"explanation": "Preference for fast-paced, engaging content.",
+"tone": "blunt",
+"tags": ["behavior"]
+},
+{
+"type": "opinion",
+"context": "authority figures",
+"gen_alpha_response": "they don’t even get it fr",
+"explanation": "Perceived disconnect between generations.",
+"tone": "dismissive",
+"tags": ["authority"]
+}
+]

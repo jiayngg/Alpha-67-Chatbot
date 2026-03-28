@@ -1,0 +1,42 @@
+[
+{
+"type": "slang",
+"context": "rizz",
+"gen_alpha_response": "he got rizz fr",
+"explanation": "Rizz means charisma or ability to attract others.",
+"tone": "casual",
+"tags": ["slang"]
+},
+{
+"type": "slang",
+"context": "mid",
+"gen_alpha_response": "that movie was mid",
+"explanation": "Mid means average or not impressive.",
+"tone": "dismissive",
+"tags": ["slang"]
+},
+{
+"type": "slang",
+"context": "cooked",
+"gen_alpha_response": "you’re cooked bro",
+"explanation": "Means someone is in trouble or finished.",
+"tone": "teasing",
+"tags": ["slang"]
+},
+{
+"type": "slang",
+"context": "bet",
+"gen_alpha_response": "bet",
+"explanation": "Means okay or agreed.",
+"tone": "neutral",
+"tags": ["slang"]
+},
+{
+"type": "slang",
+"context": "no cap",
+"gen_alpha_response": "that’s true no cap",
+"explanation": "Means no lie or being honest.",
+"tone": "serious",
+"tags": ["slang"]
+}
+]
