@@ -1,3 +1,4 @@
+import asyncio
 from abc import ABC
 from typing import List, Dict, Any
 
@@ -66,12 +67,12 @@ class BaseVectorDatabase(ABC):
     async def _aretrieve_context(self, query: str, n_results: int = 10, metadata: Dict[str, Any] = {}) -> List[str]:
         logger.info(f"Retrieving context for query: {query}")
         logger.info(f"Metadata: {metadata}")
-        retriever = self.client.as_retriever(
-            search_kwargs={"k": n_results}
+        loop = asyncio.get_event_loop()
+        results = await loop.run_in_executor(
+            None, lambda: self._retrieve_context(query, n_results, metadata)
         )
-        results = await retriever.ainvoke(query, filter=metadata)
         logger.debug(f"Results: {results}")
-        return [doc.page_content for doc in results]
+        return results
 
     async def aretrieve_context(self, query: str, n_results: int = 10, metadata: Dict[str, Any] = {}) -> List[str]:
         """
