@@ -13,8 +13,12 @@ class SupabaseVectorDatabase(BaseVectorDatabase):
         if not config.supabase_postgres_url:
             raise ValueError("Supabase PostgreSQL connection string is not set (SUPABASE_POSTGRES_URL)")
 
+        connection_url = config.supabase_postgres_url
+        if connection_url.startswith("postgresql://") or connection_url.startswith("postgres://"):
+            connection_url = connection_url.replace("://", "+psycopg://", 1)
+
         self.client = PGVector(
-            connection=config.supabase_postgres_url,
+            connection=connection_url,
             embeddings=self.embeddings.embeddings,
             collection_name="documents",
         )
