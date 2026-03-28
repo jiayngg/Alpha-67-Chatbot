@@ -80,6 +80,7 @@ class Config(BaseModel):
     ## Supabase Vector Database Configuration
     supabase_url: Optional[str] = Field(default=None, description="Supabase project URL")
     supabase_service_key: Optional[str] = Field(default=None, description="Supabase service role key")
+    supabase_postgres_url: Optional[str] = Field(default=None, description="Supabase PostgreSQL connection string")
 
     # Embedding Configuration
     embedding_type: Optional[str] = Field(default="AZUREOPENAI", description="Type of embedding to use (OPENAI, AZUREOPENAI)")
