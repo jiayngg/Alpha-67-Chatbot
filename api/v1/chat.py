@@ -41,7 +41,7 @@ async def chat(
         result = await chat_engine.process_message(
             user_input=request.input,
             conversation_id=conversation_id,
-            user_id=""  # Single user system - no user ID needed
+            user_id="anonymous"
         )
         
         logger.info(f"Successfully processed chat request for conversation {result.conversation_id}")
@@ -93,7 +93,7 @@ async def stream_chat(
             async for chunk in chat_engine.stream_process_message(
                 user_input=request.input,
                 conversation_id=conversation_id,
-                user_id=""  # Single user system - no user ID needed
+                user_id="anonymous"
             ):
                 if chunk:  # Only send non-empty chunks
                     chunk_data = StreamingChatChunk(
@@ -154,7 +154,7 @@ async def clear_history(
     logger.info(f"Received request to clear history for conversation {conversation_id}")
     
     try:
-        chat_engine.clear_history(conversation_id=conversation_id, user_id="")
+        chat_engine.clear_history(conversation_id=conversation_id, user_id="anonymous")
         logger.info(f"Successfully cleared history for conversation {conversation_id}")
         
         return {
