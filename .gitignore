@@ -15,4 +15,4 @@ wheels/
 *.pdf
 chroma_db/
 .cursorignore 
-*.log
+logs/
